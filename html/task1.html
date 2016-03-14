@@ -1,0 +1,270 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>task1</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-03-13"><meta name="DC.source" content="task1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>task1</h1><!--introduction--><p>produce the first graphs (distribution of distances and sampling time interval).</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">initiazations</a></li><li><a href="#3">seems like the data is dirty</a></li><li><a href="#4">clean data</a></li><li><a href="#5">counting time intervals bins</a></li><li><a href="#6">counting distance intervals bins</a></li><li><a href="#8">plotting time intervals bins</a></li><li><a href="#9">plotting distance intervals bins</a></li><li><a href="#10">zoomed in figures</a></li><li><a href="#11">plotting time intervals bins, zoomed</a></li><li><a href="#12">plotting distance intervals bins, zoomed</a></li><li><a href="#13">additional notes</a></li></ul></div><h2>initiazations<a name="1"></a></h2><pre class="codeinput">dir_name = <span class="string">'./01'</span>;
+file_list = ls(dir_name);
+file_list(1,:)=[]; <span class="comment">% removing .</span>
+file_list(1,:)=[]; <span class="comment">% removing ..</span>
+
+<span class="comment">% initiazations</span>
+time_interval_bin_ranges = 0:0.5:12; <span class="comment">% minutes</span>
+time_interval_bin_total = zeros(size(time_interval_bin_ranges,2),1);
+
+distance_interval_bin_ranges = 0:500:8000; <span class="comment">% meters</span>
+distance_interval_bin_total = zeros(size(distance_interval_bin_ranges,2),1);
+
+<span class="comment">% main loop</span>
+<span class="keyword">for</span> i = 1:size(file_list,1)
+</pre><pre class="codeinput">    file_name = strcat(dir_name, <span class="string">'/'</span>, file_list(i,:));
+
+    [date_time,longitude,latitude] = importfile(file_name, 1);
+</pre><h2>seems like the data is dirty<a name="3"></a></h2><pre class="codeinput">    <span class="keyword">if</span> (i == 1)
+        plot(latitude);
+        title(file_name);
+        xlabel(<span class="string">'count'</span>);
+        ylabel(<span class="string">'latitude'</span>);
+    <span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="task1_01.png" alt=""> <h2>clean data<a name="4"></a></h2><p>cleaned using a large rectangle, determined manually from gmaps:</p><p>longitude_range = [114, 118]; % min max</p><p>latitude_range = [38, 42]; % min max</p><p>excluding all points that are not inside this rectangle</p><pre class="codeinput">    [date_time,longitude,latitude] = clean_data(date_time,longitude,latitude);
+    <span class="keyword">if</span> (i == 1)
+        plot(latitude);
+        title(file_name);
+        xlabel(<span class="string">'count'</span>);
+        ylabel(<span class="string">'latitude'</span>);
+    <span class="keyword">end</span>
+<span class="comment">%     display(file_name);</span>
+<span class="comment">%     display(datestr(date_time));</span>
+<span class="comment">%     display(longitude);</span>
+<span class="comment">%     display(latitude);</span>
+<span class="comment">%     display('---------------');</span>
+</pre><img vspace="5" hspace="5" src="task1_02.png" alt=""> <h2>counting time intervals bins<a name="5"></a></h2><pre class="codeinput">    time_intervals = diff(date_time)/60; <span class="comment">% minutes</span>
+    [time_interval_bin] = histc(time_intervals,time_interval_bin_ranges);
+
+    time_interval_bin_total = time_interval_bin_total + time_interval_bin;
+</pre><h2>counting distance intervals bins<a name="6"></a></h2><pre class="codeinput">    <span class="comment">% reset</span>
+    distance_intervals = zeros(size(latitude,1)-1,1);
+
+    <span class="keyword">for</span> ii = 1:size(distance_intervals,1)
+        distance_intervals(ii) = lldistkm([latitude(ii), longitude(ii)],[latitude(ii+1), longitude(ii+1)]) * 1e3; <span class="comment">% meters</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% sometimes distance travelled between pts are 0, parking/ traffic lights</span>
+    <span class="comment">% distance_intervals(distance_intervals==0) = [];</span>
+
+    [distance_interval_bin] = histc(distance_intervals,distance_interval_bin_ranges);
+
+    distance_interval_bin_total = distance_interval_bin_total + distance_interval_bin;
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2>plotting time intervals bins<a name="8"></a></h2><p>this is the aggregate of all data sets in the folder</p><p>we see very little using the same axis as the paper</p><pre class="codeinput">figure;
+bar(time_interval_bin_ranges, time_interval_bin_total/sum(time_interval_bin_total), <span class="string">'histc'</span>);
+title(<span class="string">'time interval'</span>);
+xlabel(<span class="string">'minutes'</span>);
+ylabel(<span class="string">'proportion'</span>);
+axis([0,12,0,1]);
+</pre><img vspace="5" hspace="5" src="task1_03.png" alt=""> <h2>plotting distance intervals bins<a name="9"></a></h2><p>this is the aggregate of all data sets in the folder</p><p>we see very little using the same axis as the paper</p><pre class="codeinput">figure;
+bar(distance_interval_bin_ranges, distance_interval_bin_total/sum(distance_interval_bin_total), <span class="string">'histc'</span>);
+title(<span class="string">'distance interval'</span>);
+xlabel(<span class="string">'meters'</span>);
+ylabel(<span class="string">'proportion'</span>);
+axis([0,8000,0,1]);
+</pre><img vspace="5" hspace="5" src="task1_04.png" alt=""> <h2>zoomed in figures<a name="10"></a></h2><p>Above figures are with same axis as in the paper for ease of comparison however, for our sub set of data, it is better to plot the distribution with different limits:</p><h2>plotting time intervals bins, zoomed<a name="11"></a></h2><p>the peak at x=0.08: we see that the dominant time interval is x=0.08 minutes (5 secs), which must be the default setting for the GPS devise</p><p>the peak at x=0: by looking through the raw data we see that there are 1 sec time intervals, which are OK. However there are also 0 sec time intervals, this is unexpected from the GPS devise. These are not separated in the current figure.</p><p>longer time intervals probably indicate that the GPS device couldn't find signal to record(?) hence skipping the 5s interval</p><pre class="codeinput">openfig(<span class="string">'time_interval_zoomed_in.fig'</span>);
+</pre><img vspace="5" hspace="5" src="task1_05.png" alt=""> <h2>plotting distance intervals bins, zoomed<a name="12"></a></h2><p>the peak at x=0: there are many data points that has 0 distance travelled, due to waiting/parking/traffic lights. otherwise it looks like a exponentially decaying distribution (R^2 = 0.9938)</p><pre class="codeinput">openfig(<span class="string">'distance_interval_zoomed_in.fig'</span>);
+
+figure(<span class="string">'Position'</span>, [100, 100, 1200, 700]);
+image(imread(<span class="string">'distance_interval_zoomed_in_fitted.png'</span>));
+</pre><img vspace="5" hspace="5" src="task1_06.png" alt=""> <img vspace="5" hspace="5" src="task1_07.png" alt=""> <h2>additional notes<a name="13"></a></h2><p>Compared to the paper, the peak at 5.5minutes is not observed, due to different data source, since we are using a sub set. The shape of both distributions are different compared to the paper, probably due to the same reasons - different data source</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% task1
+% produce the first graphs (distribution of distances and sampling time interval).
+%% initiazations
+dir_name = './01';
+file_list = ls(dir_name);
+file_list(1,:)=[]; % removing .
+file_list(1,:)=[]; % removing ..
+
+% initiazations
+time_interval_bin_ranges = 0:0.5:12; % minutes    
+time_interval_bin_total = zeros(size(time_interval_bin_ranges,2),1);
+
+distance_interval_bin_ranges = 0:500:8000; % meters    
+distance_interval_bin_total = zeros(size(distance_interval_bin_ranges,2),1);
+
+% main loop
+for i = 1:size(file_list,1) 
+    file_name = strcat(dir_name, '/', file_list(i,:));
+    
+    [date_time,longitude,latitude] = importfile(file_name, 1);
+    
+    %% seems like the data is dirty
+    if (i == 1)
+        plot(latitude);
+        title(file_name);
+        xlabel('count');
+        ylabel('latitude');
+    end
+    %% clean data
+    % cleaned using a large rectangle, determined manually from gmaps:
+    %       
+    % longitude_range = [114, 118]; % min max 
+    %
+    % latitude_range = [38, 42]; % min max
+    %
+    % excluding all points that are not inside this rectangle
+    
+    [date_time,longitude,latitude] = clean_data(date_time,longitude,latitude);
+    if (i == 1)
+        plot(latitude);
+        title(file_name);
+        xlabel('count');
+        ylabel('latitude');
+    end
+%     display(file_name);
+%     display(datestr(date_time));
+%     display(longitude);
+%     display(latitude);
+%     display('REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-');
+
+    %% counting time intervals bins
+    time_intervals = diff(date_time)/60; % minutes 
+    [time_interval_bin] = histc(time_intervals,time_interval_bin_ranges);
+    
+    time_interval_bin_total = time_interval_bin_total + time_interval_bin;
+    
+    %% counting distance intervals bins
+    
+    % reset
+    distance_intervals = zeros(size(latitude,1)-1,1);
+    
+    for ii = 1:size(distance_intervals,1)
+        distance_intervals(ii) = lldistkm([latitude(ii), longitude(ii)],[latitude(ii+1), longitude(ii+1)]) * 1e3; % meters
+    end
+    
+    % sometimes distance travelled between pts are 0, parking/ traffic lights 
+    % distance_intervals(distance_intervals==0) = []; 
+    
+    [distance_interval_bin] = histc(distance_intervals,distance_interval_bin_ranges);
+    
+    distance_interval_bin_total = distance_interval_bin_total + distance_interval_bin;
+end
+
+%% plotting time intervals bins
+% this is the aggregate of all data sets in the folder
+% 
+% we see very little using the same axis as the paper
+figure;
+bar(time_interval_bin_ranges, time_interval_bin_total/sum(time_interval_bin_total), 'histc');
+title('time interval');
+xlabel('minutes');
+ylabel('proportion');
+axis([0,12,0,1]);
+    
+%% plotting distance intervals bins
+% this is the aggregate of all data sets in the folder
+% 
+% we see very little using the same axis as the paper
+figure;
+bar(distance_interval_bin_ranges, distance_interval_bin_total/sum(distance_interval_bin_total), 'histc');
+title('distance interval');
+xlabel('meters');
+ylabel('proportion');
+axis([0,8000,0,1]);
+
+%% zoomed in figures 
+% Above figures are with same axis as in the paper for ease of comparison
+% however, for our sub set of data, it is better to plot the distribution
+% with different limits:
+
+%%  plotting time intervals bins, zoomed
+% the peak at x=0.08: we see that the dominant time interval is x=0.08 minutes (5 secs), which
+% must be the default setting for the GPS devise
+%
+% the peak at x=0: by looking through the raw data we see that there are 1
+% sec time intervals, which are OK. However there are also 0 sec time
+% intervals, this is unexpected from the GPS devise. These are not
+% separated in the current figure.
+%
+% longer time intervals probably indicate that the GPS device couldn't find
+% signal to record(?) hence skipping the 5s interval
+openfig('time_interval_zoomed_in.fig');
+
+%%  plotting distance intervals bins, zoomed
+% the peak at x=0: there are many data points that has 0 distance
+% travelled, due to waiting/parking/traffic lights.
+% otherwise it looks like a exponentially decaying distribution (R^2 =
+% 0.9938)
+openfig('distance_interval_zoomed_in.fig');
+
+figure('Position', [100, 100, 1200, 700]);
+image(imread('distance_interval_zoomed_in_fitted.png'));
+
+%% additional notes
+% Compared to the paper, the peak at 5.5minutes is not observed, due to
+% different data source, since we are using a sub set. The shape of both distributions are different
+% compared to the paper, probably due to the same reasons - different data
+% source
+##### SOURCE END #####
+--></body></html>
